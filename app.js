@@ -55,24 +55,24 @@ class GridSystem {
             40: {x: 0, y: 1}
         }
 
-        //this.extraArr = ["TCR", "LOK", "LK", "JHA", "JV", "JL", "SZF", "H", "TJY", "KX"];
+        this.extraArr = ["TCR", "LOK", "LK", "JHA", "JV", "JL", "SZF", "H", "TJY", "KX"];
         //this.extraArr = ["TCR", "JX", "JZ", "TWN", "LJY", "LSH", "ELI", "CUR", "RYD", "CT"];
-        this.extraArr = ["TCR", "LOK", "KSY", "KN", "JT", "CJH", "CED", "KX", "TJY", "LSH"];
+        //this.extraArr = ["TCR", "LOK", "KSY", "KN", "JT", "CJH", "CED", "KX", "TJY", "LSH"];
 
         //this.p1 = { x: 1, y: 1, lable: 2, id: this.extraArr[0], steps: this.startingSteps, area: "mainArea", wallet: 0, total: 0, storeSteps: 1000 };
         // this.playersArr = [this.p1, this.p2, this.p3, this.p4, this.p5, this.p6, this.p7, this.p8, this.p9, this.p10];
         this.playersArr = [
-            this.p1 = new Player({x: 7, y: 4, lable: 2, id: this.extraArr[0], area: "area1", color: "grey"}),
+            this.p1 = new Player({x: 17, y: 18, lable: 2, id: this.extraArr[0], area: "area1", color: "grey"}),
 
-            // this.p2 = new Player({x: 1, y: 2, lable: 3, id: this.extraArr[1], area: "area2", color: "springgreen"}),
-            // this.p3 = new Player({x: 1, y: 3, lable: 4, id: this.extraArr[2], area: "area2", color: "orange"}),
-            // this.p4 = new Player({x: 1, y: 4, lable: 5, id: this.extraArr[3], area: "area2", color: "lightblue"}),
-            // this.p5 = new Player({x: 1, y: 5, lable: 6, id: this.extraArr[4], area: "area2", color: "lightyellow"}),
-            // this.p6 = new Player({x: 4, y: 2, lable: 7, id: this.extraArr[5], area: "area2", color: "deepskyblue"}),
-            // this.p7 = new Player({x: 4, y: 3, lable: 8, id: this.extraArr[6], area: "area2", color: "white"}),
-            // this.p8 = new Player({x: 4, y: 4, lable: 9, id: this.extraArr[7], area: "area2", color: "magenta"}),
-            // this.p9 = new Player({x: 4, y: 5, lable: 10, id: this.extraArr[8], area: "area2", color: "teal"}),
-            // this.p10 = new Player({x: 1, y: 6, lable: 11, id: this.extraArr[9], area: "area2", color: "yellow"})
+            this.p2 = new Player({x: 3, y: 10, lable: 3, id: this.extraArr[1], area: "area1", color: "springgreen"}),
+            this.p3 = new Player({x: 4, y: 10, lable: 4, id: this.extraArr[2], area: "area1", color: "orange"}),
+            this.p4 = new Player({x: 5, y: 10, lable: 5, id: this.extraArr[3], area: "area1", color: "lightblue"}),
+            this.p5 = new Player({x: 6, y: 10, lable: 6, id: this.extraArr[4], area: "area1", color: "lightyellow"}),
+            this.p6 = new Player({x: 7, y: 10, lable: 7, id: this.extraArr[5], area: "area1", color: "deepskyblue"}),
+            this.p7 = new Player({x: 3, y: 11, lable: 8, id: this.extraArr[6], area: "area1", color: "white"}),
+            this.p8 = new Player({x: 3, y: 12, lable: 9, id: this.extraArr[7], area: "area1", color: "magenta"}),
+            this.p9 = new Player({x: 3, y: 13, lable: 10, id: this.extraArr[8], area: "area1", color: "teal"}),
+            this.p10 = new Player({x: 3, y: 14, lable: 11, id: this.extraArr[9], area: "area1", color: "yellow"})
         ];
 
         this.itemsArr = [
