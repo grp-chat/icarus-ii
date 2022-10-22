@@ -208,11 +208,12 @@ class GridSystem {
         // this.allMatrixes = JSON.parse(JSON.stringify(this.allMatrixesBackup));
          //this.duplicateMatrix(matrix);
          this.playersArr.forEach((player) => {
-            player.x = player.originX;
-            player.y = player.originY;
-            player.area = player.originArea;
-            player.inventory = "";  
+            //player.x = player.originX;
+            //player.y = player.originY;
+            //player.area = player.originArea;
+            //player.inventory = "";  
             this.startingPoint(player);
+            player.steps = 0;
          });
          this.emitToUsers('sendMatrix');
     }
