@@ -39,7 +39,8 @@ class AllMatrixes {
                 {x:20,y:16},{x:20,y:17},{x:20,y:18},
             ],
             signBoards: [
-                {x: 50, y: 50, sign: "Lower Engine"}
+                {x: 261, y: 261, sign: "Boarding Ramp"},
+                {x: 25*29, y: 10*29, sign: "Command Deck"}
             ]
 
         };
@@ -87,7 +88,8 @@ class AllMatrixes {
                 // {x:29,y:15},{x:30,y:15},{x:31,y:15},{x:32,y:15}
             ],
             signBoards: [
-                {x: 50, y: 50, sign: "Lower Engine"}
+                {x: 12*29, y: 3*29, sign: "Canteen"},
+                {x: 17*29, y: 3*29, sign: "Cargo Bay"}
             ]
         };
 
@@ -130,7 +132,8 @@ class AllMatrixes {
                 //{x:29,y:15},{x:30,y:15},{x:31,y:15},{x:32,y:15}
             ],
             signBoards: [
-                {x: 50, y: 50, sign: "Lower Engine"}
+                {x: 6*29, y: 14*29, sign: "Engine Room"},
+                {x: 20*29, y: 12*29, sign: "Med Bay"}
             ]
         };
 
@@ -172,7 +175,8 @@ class AllMatrixes {
                 // {x:29,y:15},{x:30,y:15},{x:31,y:15},{x:32,y:15}
             ],
             signBoards: [
-                {x: 50, y: 50, sign: "Lower Engine"}
+                {x: 3*29, y: 15*29, sign: "Armory"},
+                {x: 25*29, y: 3*29, sign: "Communications"}
             ]
         };
 
@@ -216,7 +220,9 @@ class AllMatrixes {
                 // {x:29,y:15},{x:30,y:15},{x:31,y:15},{x:32,y:15}
             ],
             signBoards: [
-                {x: 50, y: 50, sign: "Lower Engine"}
+                {x: 15*29, y: 3*29, sign: "Electrical"},
+                {x: 23*29, y: 17*29, sign: "Power Core"}
+
             ]
         };
 

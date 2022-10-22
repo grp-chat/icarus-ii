@@ -272,7 +272,7 @@ class GridSystemClient {
         }
         this.renderRedDoors();
         this.renderFinishFlags();
-        //this.renderSignBoards();
+        this.renderSignBoards();
         this.setTopTitle();
         
     }
