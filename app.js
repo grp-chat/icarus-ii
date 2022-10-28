@@ -22,6 +22,7 @@ console.log("Server listening at " + PORT);
 const { Player } = require('./player');
 const { Item } = require('./item');
 const { AllMatrixes } = require('./maps');
+const { Console } = require('console');
 //------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ class GridSystem {
         this.allMatrixes = new AllMatrixes();
         //this.allMatrixesBackup = JSON.parse(JSON.stringify(new AllMatrixes()));
         this.matrix = this.allMatrixes.area2;
-        this.startingSteps = 500;
+        //this.startingSteps = 500;
         this.maxSteps = 150;
         this.keyCodes = {
             37: {x: -1, y: 0},
@@ -93,7 +94,6 @@ class GridSystem {
         this.playersArr.forEach((player) => {
             player.maxSteps = this.maxSteps;
             this.startingPoint(player);
-            
         });
     }
 
@@ -203,6 +203,10 @@ class GridSystem {
 
     }
 
+    setPlayerTeam(plyrSlot, team) {
+        plyrSlot.team = team;
+    }
+
     resetMap() {
         this.allMatrixes = new AllMatrixes();
         // this.allMatrixes = JSON.parse(JSON.stringify(this.allMatrixesBackup));
@@ -257,11 +261,17 @@ io.sockets.on('connection', function (sock) {
     sock.on('createChatObject', data => {
         const getPlayerObject = gridSystem.playersArr.find(object => object.id === data.nickname);
         const message = data.message2;
-        // console.log(getPlayerObject)
-        const { x, y, area, id } = getPlayerObject;
-        const allMatrixes = gridSystem.allMatrixes;
-        io.emit('createChatObject', { x, y, area, message, id, allMatrixes });
         
+        const { x, y, area, id } = getPlayerObject;
+        const matrixHeight = gridSystem.allMatrixes[area].gridMatrix.length;
+        const matrixLength = gridSystem.allMatrixes[area].gridMatrix[0].length
+        io.emit('createChatObject', { x, y, message, id, matrixHeight, matrixLength });
+        
+    });
+    sock.on('displayMission', data => {
+        //const message = "Mission: This is a test mission, testing mission display.............";
+        const getNum = data;
+        io.emit('missionObject', getNum);
     });
 
     sock.on('useItem', (data) => {
@@ -287,6 +297,9 @@ io.sockets.on('connection', function (sock) {
         gridSystem.emitToUsers('sendMatrix');
         
     });
+    sock.on('refreshCanvas', () => {
+        gridSystem.emitToUsers('sendMatrix');
+    });
 
     sock.on('goToLevel', (data) => {
         
@@ -308,6 +321,20 @@ io.sockets.on('connection', function (sock) {
 
             gridSystem.emitToUsers('sendMatrix');
         });
+    });
+
+    sock.on('setSignTime', data => {
+        const getPlayerObject = gridSystem.playersArr.find(object => object.id === data.nickname);
+        const { signBoards } = gridSystem.allMatrixes[getPlayerObject.area];
+        signBoards[data.num1].sign = `${data.num2} seconds`;
+        gridSystem.emitToUsers('sendMatrix');
+        //io.emit('setSign', data);
+    });
+
+    sock.on('setPlayerTeam', data => {
+        const getPlayerObject = gridSystem.playersArr.find(object => object.id === data.studentId);
+        gridSystem.setPlayerTeam(getPlayerObject, data.getNum);
+        gridSystem.emitToUsers('sendMatrix');
     });
 
 

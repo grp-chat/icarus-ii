@@ -75,8 +75,10 @@ var triggerList = [];
 
 let matrixAreaRenderingHere = "";
 let chatObjectsArr = [];
+let missionObjectArr = [];
 let matrixLengthXAxis = 0;
 let matrixLengthYAxis = 0;
+
 // let text = "Text here Text here Text here Text here Text here Text here Text here Text here";
 // let i = 1;
 // let char;
@@ -208,21 +210,7 @@ function clientRender(data) {
     const config = { playersArr, extraArr, itemsArr, playerMatrix, playerAreaTitle, redDoorCoords, signBoards, finishFlags };
     const clientRender = new GridSystemClient(config);
     clientRender.render();
-     
-    // data.playersArr.forEach(player => {
-    //     if (player.id === nickname) {
-    //         const config = {
-    //             playersArr: data.playersArr,
-    //             extraArr: data.extraArr,
-    //             itemsArr: data.itemsArr,
-    //             playerMatrix: data.allMatrixes[player.area].gridMatrix,
-    //             playerAreaTitle: data.allMatrixes[player.area].title,
-    //             redDoorCoords: data.allMatrixes[player.area].doors
-    //         }
-    //         const clientRender = new GridSystemClient(config);
-    //         clientRender.render();
-    //     }
-    // });
+    
 }
 
 
@@ -264,24 +252,33 @@ sock.on('createChatObject', data => {
     const getChatObject = chatObjectsArr.find(chatObj => chatObj.id === data.id);
     // console.log(chatObjectsArr.length);
     if (!getChatObject) {
-        const chatObject = new ChatObject({ x: data.x, y: data.y, area: data.area, message: data.message, id: data.id, allMatrixes: data.allMatrixes});
+        const chatObject = new ChatObject({ x: data.x, y: data.y, message: data.message, id: data.id, matrixHeight: data.matrixHeight, matrixLength: data.matrixLength});
         chatObject.typeWriter();
         chatObjectsArr.push(chatObject);
     } else {
-        // const getChatObjectIndex = chatObjectsArr.findIndex(chatObj => chatObj.id === data.id);
+
+        //const { id, message, matrixHeight, matrixLength, ...updatingValues } = data;
         const index = chatObjectsArr.indexOf(getChatObject);
         chatObjectsArr[index].x = data.x;
         chatObjectsArr[index].y = data.y;
+        //chatObjectsArr[index] = { ...chatObjectsArr[index], ...updatingValues}
+
         chatObjectsArr[index].text = data.message;
-        chatObjectsArr[index].area = data.area;
+        //chatObjectsArr[index].area = data.area;
         chatObjectsArr[index].i = 1;
         chatObjectsArr[index].char = "";
         chatObjectsArr[index].typeWriter();
     }
-    // const {id, ...rest} = data;
-    
+});
+sock.on('missionObject', data => {
+    missionObjectArr = [];
+    const getNum = data;
+    const mission = missions[getNum];
+    const missionObject = new ChatObject({ message2: mission });
+    missionObject.typeWriterLarge();
+    missionObjectArr.push(missionObject);
+    sock.emit('refreshCanvas');
 
-    
 });
 
 sock.on('loadMatrix', (data) => {
@@ -291,7 +288,8 @@ sock.on('loadMatrix', (data) => {
 
     clientRender(data);
 
-    
+    const timerObject = new ChatObject({ message: "" });
+    timerObject.runTimer();
     
 });
 
@@ -313,6 +311,12 @@ sock.on('sendMatrix', (data) => {
             chatObj.justPrint();
         }
     });
+    missionObjectArr.forEach(mission => {
+        mission.justPrintLarge();
+    });
+
+    //const timerObject = new ChatObject({ message: "" });
+    //timerObject.runTimer();
     
     // typeWriterRender();
 });

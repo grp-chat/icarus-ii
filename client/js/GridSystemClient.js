@@ -6,6 +6,7 @@ class GridSystemClient {
         this.finishFlags = config.finishFlags;
         this.areaTitle = config.playerAreaTitle;
         this.itemsArr = config.itemsArr;
+        
 
         this.uiContext = this.getContext(0, 0, "transparent", false);
         this.outlineContext = this.getContext(0, 0, "transparent");
@@ -15,20 +16,24 @@ class GridSystemClient {
 
         this.cellSize = 27;
         this.padding = 2;
-        //this.students = ["TCR", "LXR", "LK", "JHA", "JV", "JL", "SZF", "H", "TJY", "KX"];
-        //this.students = ["TCR", "JX", "JZ", "TWN", "LJY", "LSH", "ELI", "CUR", "RYD", "CT"];
-        //this.students = ["TCR", "LOK", "KSY", "KN", "JT", "CJH", "CED", "KX", "TJY", "LSH"];
+        
         this.students = config.extraArr;
 
         // this.p1 = {color: "orange", lable: 2, id: this.students[0]};
         // this.p2 = {color: "pink", lable: 3, id: this.students[1]};
         this.playersArr = config.playersArr;
 
+        this.teams = {
+            "1": {line: 0, prefix: "🟥:", playerString: ""},
+            "2": {line: 15, prefix: "🟦:", playerString: ""},
+            "3": {line: 30, prefix: "🟩:",playerString: ""}
+        }
+
         //document.addEventListener("keydown", this.movePlayer);
-        this.text = "Player here says hello world";
-        this.i = 1;
-        this.char = "";
-        this.fps = 20;
+        // this.text = "Player here says hello world";
+        // this.i = 1;
+        // this.char = "";
+        // this.fps = 20;
         
     }
 
@@ -72,19 +77,7 @@ class GridSystemClient {
         this.uiContext.canvas.style.marginLeft = "-8px";
         this.uiContext.canvas.style.marginTop = "-12px";
     }
-    // chatContextSettings() {
-    //     const w = (this.cellSize + this.padding) * this.matrix[0].length - (this.padding);
-    //     const h = (this.cellSize + this.padding) * this.matrix.length - (this.padding);
-
-    //     this.chatContext.canvas.width = w;
-    //     this.chatContext.canvas.height = h;
-    //     //const center = this.getCenter(w, h);
-    //     const center = this.getTopLeftFromUIContext();
-    //     this.chatContext.canvas.style.marginLeft = center.x;
-    //     this.chatContext.canvas.style.marginTop = center.y;
-    //     this.chatContext.canvas.style.background = "transparent";
-    //     //this.chatContext.canvas.style.border = "2px solid black";
-    // }
+    
     outlineContextSettings() {
         const w = (this.cellSize + this.padding) * this.matrix[0].length - (this.padding);
         const h = (this.cellSize + this.padding) * this.matrix.length - (this.padding);
@@ -126,13 +119,28 @@ class GridSystemClient {
 
             nextLine = nextLine + 15;
         });
-        nextLine = nextLine - 5;
+        nextLine = nextLine - 10;
 
         this.topContext.beginPath();
         this.topContext.moveTo(0, nextLine);
         this.topContext.lineTo(270, nextLine);
         this.topContext.strokeStyle = "white";
         this.topContext.stroke();
+
+        nextLine = nextLine + 15;
+        //this.topContext.fillText("testing", 0, nextLine);
+        
+        this.playersArr.forEach(player => {
+            if(this.teams[player.team] === undefined) {return}
+            this.teams[player.team].playerString = `${this.teams[player.team].playerString} ${player.id}`;
+        });
+        
+        Object.keys(this.teams).forEach((key) => {
+            const { prefix, playerString, line } = this.teams[key];
+            if (playerString === "") {return}
+            this.topContext.fillText(`${prefix}${playerString}`, 0, nextLine + line);   
+        });
+
     }
     lableContextSettings() {
 
@@ -147,7 +155,7 @@ class GridSystemClient {
         this.lableContext.canvas.style.marginTop = center.y;
 
         this.lableContext.canvas.style.background = "transparent";
-        this.lableContext.canvas.style.border = "2px solid blue";
+        //this.lableContext.canvas.style.border = "2px solid blue";
 
         //sssssssssssssssssssssssssssssssssssssssssssssssssssssssss
         
@@ -160,6 +168,8 @@ class GridSystemClient {
         //this.chatContextSettings();
         this.topContextSettings();
         this.lableContextSettings();
+        
+
     }
 
 
@@ -208,7 +218,10 @@ class GridSystemClient {
             row * (this.cellSize + this.padding) + getItemObject.rowValue);
     }
 
-
+    setSignBoards(signNum, signText) {
+        const signBoards = this.signBoards;
+        signBoards[signNum].sign = signText;
+    }
     renderSignBoards() {
         const signBoards = this.signBoards;
         signBoards.forEach(signboard => {
@@ -219,10 +232,6 @@ class GridSystemClient {
             this.lableContext.fillText(signboard.sign, signboard.x + 5, signboard.y + 30);
         });
 
-        
-        
-        
-        
     }
     renderRedDoors() {
         const redDoorCoords = this.redDoorCoords;
@@ -244,12 +253,10 @@ class GridSystemClient {
         this.uiContext.font = "20px Courier";
         this.uiContext.fillStyle = "white";
 
-        // const getPlayerArea = playersArr.find(player => player.id === nickname);
-
-        // console.log(this.matrix)
-        //this.uiContext.fillText(this.areaTitle, 20, 30);
         this.uiContext.fillText("Icarus II", 20, 30);
         // this.uiContext.fillText(this.areaTitle, 20, 30);
+        this.uiContext.canvas.style.border = "2px solid green";
+
     }
 
     render() {
@@ -272,6 +279,7 @@ class GridSystemClient {
         }
         this.renderRedDoors();
         this.renderFinishFlags();
+        //this.setSignBoards(0, "testing 2");
         this.renderSignBoards();
         this.setTopTitle();
         

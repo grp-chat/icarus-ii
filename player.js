@@ -4,7 +4,7 @@ class Player {
         this.y = config.y;
         this.lable = config.lable;
         this.id = config.id || "GS";
-        this.startingSteps = 0;
+        this.startingSteps = 500;
         this.maxSteps = config.maxSteps || 500;
         this.steps = config.steps || this.startingSteps;
         this.area = config.area || "area1";
@@ -14,6 +14,7 @@ class Player {
         this.originArea = config.area;
         this.inventory = "";
         this.maxInventory = 10;
+        this.team = 0;
     
     }
 

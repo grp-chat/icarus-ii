@@ -1,21 +1,31 @@
 class ChatObject {
     constructor(config) {
         this.text = config.message || "Player says hello";
+        this.text2 = config.message2 || "";
         this.id = config.id;
-        this.area = config.area;
-        this.allMatrixes = config.allMatrixes;
+        //this.area = config.area;
+        //this.allMatrixes = config.allMatrixes;
         this.i = 1;
         this.char = "";
-        this.fps = 20;
+        this.fps = 50;
         this.cellSize = config.cellSize || 27;
         this.padding = config.padding || 2;
         this.chatContext = this.getContext(0, 0, "transparent", false);
-        this.matrixLengthXAxis = this.allMatrixes[this.area].gridMatrix[0].length || 34;
-        this.matrixLengthYAxis = this.allMatrixes[this.area].gridMatrix.length || 21;
-        
+        //this.matrixLengthXAxis = this.allMatrixes[this.area].gridMatrix[0].length || 34;
+        //this.matrixLengthYAxis = this.allMatrixes[this.area].gridMatrix.length || 21;
+
+        this.matrixLengthXAxis = config.matrixLength || 34;
+        this.matrixLengthYAxis = config.matrixHeight || 21;
+
         this.x = config.x;
         this.y = config.y;
-        //this.chatContext = super.getContext(1000, 580, "transparent", false);
+
+        this.display = "";
+        this.duration = 10;
+        this.timer = this.duration;
+        this.minutes = null;
+        this.seconds = null;
+
     }
 
     getCenter(w, h) {
@@ -65,21 +75,40 @@ class ChatObject {
     }
 
     resetTypeWriter() {
-        
+
     }
-    typeWriter(){
+    typeWriterLarge() {
         this.chatContextSettings()
-        
-        this.char = this.text.substr(0, this.i);  
+
+        const xLarge = 20;
+        const yLarge = 20;
+
+        this.char = this.text2.substr(0, this.i);
         // Clear the canvas
-        this.chatContext.clearRect(0,0,this.chatContext.canvas.width, this.chatContext.canvas.height)
+        //this.chatContext.clearRect(0,0,this.chatContext.canvas.width, this.chatContext.canvas.height)
+
+        this.chatContext.font = '20px Courier';
+        this.chatContext.fillStyle = 'white';
+        this.chatContext.fillText(this.char, xLarge, yLarge);
+        if (this.i <= this.text2.length + 20) {
+            setTimeout(this.typeWriterLarge.bind(this), this.fps)
+            this.i++;
+        }
+
+    }
+    typeWriter() {
+        this.chatContextSettings()
+
+        this.char = this.text.substr(0, this.i);
+        // Clear the canvas
+        this.chatContext.clearRect(0, 0, this.chatContext.canvas.width, this.chatContext.canvas.height)
 
         this.chatContext.font = '11px Courier';
         this.chatContext.fillStyle = 'white';
-        this.chatContext.fillText(this.char, this.x * (this.cellSize + this.padding), this.y * (this.cellSize + this.padding));  
-        if (this.i<=this.text.length +200){
-          setTimeout(this.typeWriter.bind(this), this.fps)
-          this.i++;
+        this.chatContext.fillText(this.char, this.x * (this.cellSize + this.padding), this.y * (this.cellSize + this.padding));
+        if (this.i <= this.text.length + 200) {
+            setTimeout(this.typeWriter.bind(this), this.fps)
+            this.i++;
         }
 
     }
@@ -89,7 +118,53 @@ class ChatObject {
         this.chatContextSettings();
         this.chatContext.font = '11px Courier';
         this.chatContext.fillStyle = 'white';
-        this.chatContext.fillText(this.char, this.x * (this.cellSize + this.padding), this.y * (this.cellSize + this.padding));  
+        this.chatContext.fillText(this.char, this.x * (this.cellSize + this.padding), this.y * (this.cellSize + this.padding));
+
+    }
+    justPrintLarge() {
+
+        this.chatContext = this.getContext(0, 0, "transparent", false);
+        this.chatContextSettings();
+        this.chatContext.font = '20px Courier';
+        this.chatContext.fillStyle = 'white';
+        this.chatContext.fillText(this.char, 20, 20);
+
+    }
+
+    runTimer() {
+
+        this.chatContext.clearRect(0, 0, this.chatContext.canvas.width, this.chatContext.canvas.height)
+
+        this.chatContext = this.getContext(0, 0, "transparent", false);
+        this.chatContextSettings();
+        this.chatContext.fillStyle = "rgba(0,0,0,0.5)";
+        this.chatContext.strokeStyle = "purple";
+        this.chatContext.rect(15, 550, 70, 30);
+
+        this.chatContext.stroke()
+        this.chatContext.fill()
+
+        this.minutes = parseInt(this.timer / 60, 10);
+        this.seconds = parseInt(this.timer % 60, 10);
+
+        this.minutes = this.minutes < 10 ? "0" + this.minutes : this.minutes;
+        this.seconds = this.seconds < 10 ? "0" + this.seconds : this.seconds;
+
+        this.display = this.minutes + ":" + this.seconds;
+
+        this.chatContext.font = '20px Courier';
+        this.chatContext.fillStyle = 'white';
+        this.chatContext.fillText(this.display, 20, 570);
+
+        if (--this.timer >= 0) {
+            //this.timer = this.duration;
+            setTimeout(this.runTimer.bind(this), 1000);
+        }
+
+        
+
+
+
 
     }
 }

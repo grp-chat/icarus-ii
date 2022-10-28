@@ -114,12 +114,31 @@ class numCommand {
     }
 
     executeCommand(message) {
-        var extractedNum = message.replace(/\D/g, '');
+        const extractedNum = message.replace(/\D/g, '');
         if (nickname != "TCR") { return }
         if (message.slice(0, this.prefix.length) != this.prefix) { return }
 
-        var getNum = extractedNum;
+        const getNum = extractedNum;
         sock.emit(this.sockEmitFlag, getNum);
+    }
+}
+class multiNumCommand {
+    constructor(prefix, sockEmitFlag) {
+        this.prefix = prefix;
+        this.sockEmitFlag = sockEmitFlag;
+    }
+
+    executeCommand(message) {
+        const extractedNums = message.match(/[<>]?(\d+)/g); // extract number with <> symbol
+        //const extractedNums = message.match(/(\d+)/g); //Original regex without extracting <> sysmbol
+        //const extractNickname = message.slice(4).replace(/[^A-Z]+/g, "");
+        if (nickname != "TCR") { return }
+        if (message.slice(0, this.prefix.length) != this.prefix) { return }
+        //if (studentsArr.includes(extractNickname) === false) { return }
+
+        const num1 = extractedNums[0];
+        const num2 = extractedNums[1];
+        sock.emit(this.sockEmitFlag, { num1, num2, nickname });
     }
 }
 class numAndIdCommand {
@@ -148,12 +167,15 @@ const allCommands = [
     new numAndIdCommand("TCR: +", 'addSteps'),
     new numAndIdCommand("TCR: good ", 'sendPW'),
     new numAndIdCommand("TCR: nope ", 'failed'),
+    new numAndIdCommand("TCR: set team ", 'setPlayerTeam'),
     new fixedCommand("TCR: mind control off", 'mindControlOff'),
     new fixedCommand("TCR: go next level", 'goToNextMap'),
     new fixedCommand("TCR: restart level", 'restartLevel'),
+    new numCommand("TCR: display mission ", 'displayMission'),
     new numCommand("TCR: open lock ", 'openLock'),
     new numCommand("TCR: all +", 'addStepsAll'),
     new numCommand("TCR: go level ", 'goToLevel'),
+    new multiNumCommand("TCR: set sign ", 'setSignTime'),
     new numAndIdCommand("TCR: use ", 'useItem'),
     new localFixedCommand("TCR: list", openModal),
     new idCommand("TCR: go a2 ", 'teleportPlayerArea2'),
